@@ -1,6 +1,7 @@
 package com.example
 
-import com.google.gson.GsonBuilder
+import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.ObjectMapper
 import freemarker.cache.ClassTemplateLoader
 import freemarker.cache.FileTemplateLoader
 import freemarker.cache.MultiTemplateLoader
@@ -47,10 +48,11 @@ fun Application.module() {
     })
     install(Routing)
     {
-        val gson = GsonBuilder().create()
+        val objectMapper = ObjectMapper()
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         intercept(ApplicationCallPipeline.Infrastructure) { call ->
             call.transform.register<JsonResponse> { value ->
-                TextContent(gson.toJson(value.data), ContentType.Application.Json)
+                TextContent(objectMapper.writeValueAsString(value.data), ContentType.Application.Json)
             }
         }
 

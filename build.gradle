@@ -29,7 +29,7 @@ dependencies {
     compile "org.jetbrains.ktor:ktor-netty:$ktor_version"
     compile "org.jetbrains.ktor:ktor-jetty:$ktor_version"
     compile "org.jetbrains.ktor:ktor-freemarker:$ktor_version"
-    compile "com.google.code.gson:gson:2.7"
+    compile 'com.fasterxml.jackson.core:jackson-databind:2.8.8.1'
     compile "ch.qos.logback:logback-classic:1.2.1"
     compile "org.slf4j:jul-to-slf4j:1.7.12"
 }
