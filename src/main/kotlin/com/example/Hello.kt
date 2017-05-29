@@ -16,9 +16,9 @@ import org.jetbrains.ktor.features.Compression
 import org.jetbrains.ktor.features.DefaultHeaders
 import org.jetbrains.ktor.freemarker.FreeMarker
 import org.jetbrains.ktor.freemarker.FreeMarkerContent
-import org.jetbrains.ktor.host.embeddedServer
+import org.jetbrains.ktor.host.commandLineEnvironment
 import org.jetbrains.ktor.http.ContentType
-import org.jetbrains.ktor.jetty.Jetty
+import org.jetbrains.ktor.jetty.JettyApplicationHost
 import org.jetbrains.ktor.logging.CallLogging
 import org.jetbrains.ktor.response.respondText
 import org.jetbrains.ktor.routing.Routing
@@ -46,8 +46,11 @@ fun Application.module() {
         templateExceptionHandler = TemplateExceptionHandler.HTML_DEBUG_HANDLER
         outputFormat = HTMLOutputFormat.INSTANCE
     })
-    install(Routing)
-    {
+    environment.log.info("Hello")
+    val baz = environment.config.config("myapp").config("foobar").property("baz").getString()
+    environment.log.info("baz: $baz")
+
+    install(Routing) {
         val objectMapper = ObjectMapper()
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         intercept(ApplicationCallPipeline.Infrastructure) { call ->
@@ -91,6 +94,6 @@ fun Application.module() {
 }
 
 fun main(args: Array<String>) {
-    embeddedServer(Jetty, 8080, module = Application::module)
-            .start()
+    val applicationEnvironment = commandLineEnvironment(args)
+    JettyApplicationHost(applicationEnvironment).start()
 }

@@ -10,5 +10,7 @@
     </root>
 
     <logger name="org.eclipse.jetty" level="INFO"/>
+    <logger name="ktor" level="TRACE"/>
+    <logger name="Application" level="TRACE"/>
 
 </configuration>
