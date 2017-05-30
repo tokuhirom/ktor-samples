@@ -17,7 +17,9 @@ import org.jetbrains.ktor.features.DefaultHeaders
 import org.jetbrains.ktor.freemarker.FreeMarker
 import org.jetbrains.ktor.freemarker.FreeMarkerContent
 import org.jetbrains.ktor.host.commandLineEnvironment
+import org.jetbrains.ktor.host.embeddedServer
 import org.jetbrains.ktor.http.ContentType
+import org.jetbrains.ktor.jetty.Jetty
 import org.jetbrains.ktor.jetty.JettyApplicationHost
 import org.jetbrains.ktor.logging.CallLogging
 import org.jetbrains.ktor.response.respondText
@@ -47,7 +49,7 @@ fun Application.module() {
         outputFormat = HTMLOutputFormat.INSTANCE
     })
     environment.log.info("Hello")
-    val baz = environment.config.config("myapp").config("foobar").property("baz").getString()
+    val baz = environment.config.property("myapp.foobar.baz").getString()
     environment.log.info("baz: $baz")
 
     install(Routing) {
@@ -59,7 +61,6 @@ fun Application.module() {
             }
         }
 
-        // TODO path variables
         get("/") {
             call.respondText("Hello, World!")
         }
